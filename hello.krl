@@ -16,7 +16,7 @@ ruleset hello_world {
   rule hello_world {
     select when echo hello
     pre {
-      name = event:attr("name").klog("our passed in Name: ");
+      name = event:attr("name").defaultsTo(ent:name,"use stored name");
     }
     {
       send_directive("say") with
@@ -24,6 +24,19 @@ ruleset hello_world {
     }
     always {
       log ("LOG says Hello " + name);
+    }
+  }
+  rule store_name {
+    select when hello name
+    pre {
+      passed_name = event:attr("name").klog("our passed Name: ");
+    }
+    {
+      send_directive("store_name") with
+        name = passed_name;
+    }
+    always {
+      set ent:name passed_name;
     }
   }
 }
