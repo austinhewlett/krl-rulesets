@@ -15,7 +15,15 @@ ruleset hello_world {
   }
   rule hello_world {
     select when echo hello
-    send_directive("say") with
-      something = "Hello World";
+    pre {
+      name = event:attr("name").klog("our passed in Name: ");
+    }
+    {
+      send_directive("say") with
+        something = "Hello #{name}";
+    }
+    always {
+      log ("LOG says Hello " + name);
+    }
   }
 }
