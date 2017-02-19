@@ -16,14 +16,16 @@ ruleset hello_world {
   rule hello_world {
     select when echo hello
     pre {
-      name = event:attr("name").defaultsTo(ent:name,"use stored name");
+      id = event:attr("id").defaultsTo("_0", "no id passed.");
+      first = ent:name{[id,"name","first"]};
+      last = ent:name{[id,"name","last"]};
     }
     {
       send_directive("say") with
-        something = "Hello #{name}";
+        greeting = "Hello #{first} #{last}";
     }
     always {
-      log ("LOG says Hello " + name);
+      log "LOG says Hello " + first + " " + last;
     }
   }
   rule store_name {
