@@ -29,14 +29,26 @@ ruleset hello_world {
   rule store_name {
     select when hello name
     pre {
-      passed_name = event:attr("name").klog("our passed Name: ");
+      id = event:attr("id").klog("our pass in id: ");
+      first = event:attr("first").klog("our passed in first: ");
+      last = event:attr("last").klog("our passed in last: ");
+      init = {"_0": {
+          "name": {
+            "first": "GLaDOS",
+            "last": ""
+          }
+        }}
     }
     {
       send_directive("store_name") with
-        name = passed_name;
+        passed_id = id and
+        passed_first = first and
+        passed_last = last;
     }
     always {
-      set ent:name passed_name;
+      set ent:name init if not ent:name{["_0"]};
+      set ent:name{[id,"name","first"]} first;
+      set ent:name{[id,"name","last"]} last;
     }
   }
 }
