@@ -18,7 +18,7 @@ ruleset trip_store {
     };
     short_trips = function() {
       long_trips = ent:long_trip.keys().klog("long trip ids: ");
-      short_trips = ent:trips.filter(function(k,v){
+      short_trips = ent:trip.filter(function(k,v){
         long_trips.none(function(x) {
           x eq k
         }).klog("Short trip filtered");
