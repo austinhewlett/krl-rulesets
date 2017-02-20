@@ -4,11 +4,11 @@ ruleset trip_store {
     description << stores information about trips >>
     author "Austin Hewlett"
     logging on
+    provides trips, long_trips, short_trips
   }
   global {
     trips = function() {
-      trips = "";
-      trips;
+      trips = ent:trip;
     };
     long_trips = function() {
       long_trips = "";
@@ -22,7 +22,7 @@ ruleset trip_store {
   rule collect_trips {
     select when explicit trip_processed
     pre {
-      id = event:attr("id").klog("our pass in id: ");
+      id = random.uuid();
       mileage = event:attr("mileage").defaultsTo(0, "no mileage passed");
       timestamp = time:now();
       init = {"_0": {
