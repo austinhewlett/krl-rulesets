@@ -16,7 +16,15 @@ ruleset echo {
   }
   rule message {
     select when echo message
+    pre {
+      input = event:attr("input").klog("The passed in input: ");
+    }
+    {
       send_directive("say") with
-        something = input
+        something = input ;
+    }
+    always {
+      log ("LOG says " + input);
+    }
   }
 }
