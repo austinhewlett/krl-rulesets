@@ -6,6 +6,7 @@ ruleset hello_world {
     logging on
     sharing on
     provides users
+    provides hello
   }
   global {
     hello = function(obj) {
@@ -23,44 +24,43 @@ ruleset hello_world {
       name = first + " " + last;
       name;
     };
-    user_by_name = function(full_name){
+    user_by_name = function(full_name) {
       all_users = users();
-      filtered_users = all_users.filter( function(user_id, val){
-        constructed_name = val{["name","first"]} + " " + val{["name","last"]};
-        (constructed_name eq full_name);
+      filtered_users = all_users.filter( function(user_id, val) {
+        constructed_name = val{["name", "first"]} + " " + val{["name", "last"]};
+        (constructed_name eq full_name)
         });
-      user = filtered_users.head().klog("matching user: "); // default to default user from previous steps. 
+      user = filtered_users.head().klog("matching user: "); // default to default user from previous steps.
       user
-    };
+    }
   }
   rule hello_world {
     select when echo hello
     pre{
-      name = event:attr("name").defaultsTo("HAL 9000","no name passed.");
+      name = event:attr("name").defaultsTo("HAL 9000", "no name passed.");
       full_name = name.split(re/\s/);
-      first_name = full_name[0].klog("first : ");
-      last_name = full_name[1].klog("last : "); // note we don't check name format its assumed.
-      matching_user = user_by_name(name).klog("user result: "); //has id
+      first_name = full_name[0].klog("first: ");
+      last_name = full_name[1].klog("last: ");
+      matching_user = user_by_name(name).klog("user result: ");
       user_id = matching_user.keys().head().klog("id: ");
       new_user = {
-                "id"    : last_name.lc() + "_" + first_name.lc(),
-                "first" : first_name,
-                "last"  : last_name
-              };
+        "id": last_name.lc() + "_" + first_name.lc(),
+        "first": first_name,
+        "last": last_name
+      };
     }
-    if(not user_id.isnull() ) then {
-        send_directive("say") with
-          something = "Hello #{name}";
+    if (not user_id.isnull() ) then {
+      send_directive("say") with
+        something = "Hello #{name}";
     }
     fired {
-        log "LOG  says hello to " + name ;
-        set ent:name{[user_id,"visits"]} ent:name{[user_id,"visits"]} + 1;
+      log "LOG  says hello to " + name ;
+      set ent:name{[user_id,"visits"]} ent:name{[user_id,"visits"]} + 1;
     }
     else {
-        raise explicit event 'new_user' // common bug to not put in ''.
-          attributes new_user;       
-       log "LOG asking to create " + name ;
-           
+      raise explicit event 'new_user'
+        attributes new_user;
+      log "LOG asking to create " + name ;
     }
   }
   rule store_name {
@@ -89,27 +89,27 @@ ruleset hello_world {
   }
   rule new_user {
     select when explicit new_user
-    pre{
+    pre {
       id = event:attr("id").klog("our pass in Id: ");
       first = event:attr("first").klog("our passed in first: ");
       last = event:attr("last").klog("our passed in last: ");
       new_user = {
-          "name":{
-            "first":first,
-            "last":last
-            },
-          "visits": 1
-          };
+        "name" : {
+          "first": first,
+          "last": last
+        },
+        "visits": 1
+      };
     }
     {
       send_directive("say") with
-          something = "Hello #{first_name} #{last_name}";
+        something = "Hello #{first} #{last}";
       send_directive("new_user") with
-          passed_id = id and
-          passed_first = first and
-          passed_last = last;
+        passed_id = id and 
+        passed_first = first and
+        passed_last = last;
     }
-    always{
+    always {
       set ent:name{[id]} new_user;
     }
   }
