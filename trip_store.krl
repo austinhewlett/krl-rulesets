@@ -4,14 +4,17 @@ ruleset trip_store {
   }
   global {
     trips = function() {
-
-    }
+      trips = "";
+      trips;
+    };
     long_trips = function() {
-
-    }
-    short trips = function() {
-
-    }
+      long_trips = "";
+      long_trips;
+    };
+    short_trips = function() {
+      short_trips = "";
+      short_trips;
+    };
   }
   rule collect_trips {
     select when explicit trip_processed
@@ -22,7 +25,7 @@ ruleset trip_store {
       init = {"_0": {
           "trip": {
             "mileage": "0",
-            "timestamp": timestamp.now()}}
+            "timestamp": time:now()}}
           }
     }
     {
@@ -36,11 +39,5 @@ ruleset trip_store {
       set ent:trip{[id,"trip","mileage"]} mileage;
       set ent:trip{[id,"trip","timestamp"]} timestamp;
     }
-  }
-  rule collect_long_trips {
-
-  }
-  rule clear_trips {
-
   }
 }
