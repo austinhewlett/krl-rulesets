@@ -42,6 +42,7 @@ ruleset track_tips {
     } 
     else {
       raise explicit event 'found_long_trip'
+        attributes event:attrs()
     }
   }
   rule found_long_trip {
