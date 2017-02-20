@@ -9,6 +9,7 @@ ruleset trip_store {
   global {
     trips = function() {
       trips = ent:trip;
+      trips;
     };
     long_trips = function() {
       long_trips = "";
@@ -22,7 +23,7 @@ ruleset trip_store {
   rule collect_trips {
     select when explicit trip_processed
     pre {
-      id = random.uuid();
+      id = event:attr("id").klog("our pass in id: ");
       mileage = event:attr("mileage").defaultsTo(0, "no mileage passed");
       timestamp = time:now();
       init = {"_0": {
