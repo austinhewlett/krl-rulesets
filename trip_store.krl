@@ -19,7 +19,7 @@ ruleset trip_store {
     short_trips = function() {
       long_trips = ent:long_trip.keys();
       short_trips = ent:trips.filter(function(k,v){
-        long_trips.none(function(x) {x neq k});
+        long_trips.none(function(x) {x eq k});
       });
       short_trips;
     };
