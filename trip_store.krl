@@ -4,6 +4,7 @@ ruleset trip_store {
     description << stores information about trips >>
     author "Austin Hewlett"
     logging on
+    sharing on
     
   }
   global {
