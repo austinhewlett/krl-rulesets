@@ -17,7 +17,10 @@ ruleset trip_store {
       long_trips;
     };
     short_trips = function() {
-      short_trips = "";
+      long_trips = ent:long_trip.keys();
+      short_trips = ent:trips.filter(function(k,v){
+        long_trips.any(function(x) {x neq k});
+      });
       short_trips;
     };
   }
@@ -68,5 +71,12 @@ ruleset trip_store {
       set ent:long_trip{[id,"trip","mileage"]} mileage;
       set ent:long_trip{[id,"trip","timestamp"]} timestamp;
     }
+  }
+  rule clear_trips {
+    select when car trip_reset
+      always {
+        clear ent:trip;
+        clear ent:long_trip;
+      }
   }
 }
