@@ -1,6 +1,9 @@
 ruleset trip_store {
   meta {
-
+    name "Trip Store"
+    description << stores information about trips >>
+    author "Austin Hewlett"
+    logging on
   }
   global {
     trips = function() {
