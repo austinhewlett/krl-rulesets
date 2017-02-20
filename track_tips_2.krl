@@ -20,6 +20,12 @@ ruleset track_tips {
     }
     always {
       log ("LOG length " + mileage);
+      raise explicit event 'trip_processed'
+        attributes event:attrs()
     }
+  }
+  rule trip_processed {
+    select when explicit trip_processed
+    log ("LOG trip_processed attributes: " + event:attrs())
   }
 }
