@@ -4,7 +4,7 @@ ruleset trip_store {
     description << stores information about trips >>
     author "Austin Hewlett"
     logging on
-    provides trips, long_trips, short_trips
+    
   }
   global {
     trips = function() {
