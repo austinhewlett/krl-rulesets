@@ -16,7 +16,7 @@ ruleset track_tips {
     }
     {
       send_directive("trip") with
-        length = mileage
+        length = mileage ;
     }
     always {
       log ("LOG length " + mileage);
