@@ -26,7 +26,7 @@ ruleset track_tips {
   }
   rule trip_processed {
     select when explicit trip_processed
-    log ("LOG trip_processed attributes: ");
+    log "LOG trip_processed attributes: ";
   }
   rule find_long_trips {
     select when explicit trip_processed
@@ -46,6 +46,6 @@ ruleset track_tips {
   }
   rule found_long_trip {
     select when explicit found_long_trip
-    log ("LOG found_long_trip explicit event triggered");
+    log "LOG found_long_trip explicit event triggered";
   }
 }
