@@ -13,7 +13,7 @@ ruleset trip_store {
       trips;
     };
     long_trips = function() {
-      long_trips = "";
+      long_trips = ent:long_trip;
       long_trips;
     };
     short_trips = function() {
@@ -43,6 +43,30 @@ ruleset trip_store {
       set ent:trip init if not ent:trip{["_0"]};
       set ent:trip{[id,"trip","mileage"]} mileage;
       set ent:trip{[id,"trip","timestamp"]} timestamp;
+    }
+  }
+  rule collect_long_trips {
+    select when explicit found_long_trip
+    pre {
+      id = event:attr("id").klog("our pass in id: ");
+      mileage = event:attr("mileage").defaultsTo(0, "no mileage passed");
+      timestamp = time:now();
+      init = {"_0": {
+          "trip": {
+            "mileage": "0",
+            "timestamp": time:now()}}
+          }
+    }
+    {
+      send_directive("collect_long_trips") with 
+        passed_id = id and
+          passed_mileage = mileage and
+          passed_timestamp = timestamp
+    }
+    always {
+      set ent:long_trip init if not ent:long_trip{["_0"]};
+      set ent:long_trip{[id,"trip","mileage"]} mileage;
+      set ent:long_trip{[id,"trip","timestamp"]} timestamp;
     }
   }
 }
