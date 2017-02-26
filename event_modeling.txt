@@ -1,0 +1,30 @@
+# 1
+select when tweet received body re#healthcare#
+
+# 2
+select when email received subj re#BYU#
+        and subj re#football#
+
+# 3
+select when count 4 (tweet received body re#healthcare#) within 4 hours
+
+# 4
+select when tweet received body re#healthcare#
+      then (email received subj re#healthcare#
+      or email received body re#healthcare#)
+
+# 5
+select when repeat 5 (email received from re#.*#) push(nums)
+        within 20 minutes
+
+# 6
+select when tweet received body re#Stock Symbol: (\w+)# setting (symbol)
+        before stock price_change where direction eq "up" && ticker eq symbol && percent > 2
+        within 10 minutes
+
+# 7
+select when any 2 (web pageview url re#google#,
+            web pageview url re#yahoo#,
+            web pageview url re#msnbc#,
+            web pageview url re#cnn#,
+            web pageview url re#ksl#)
