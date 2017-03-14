@@ -49,4 +49,16 @@ ruleset track_trips {
     select when explicit found_long_trip
     log "LOG found_long_trip explicit event triggered";
   }
+  rule send_report {
+    select when vehicle report
+    pre {
+      trips = trips();
+    }
+    {
+      send_directive("Generating Vehicle Report");
+    } always {
+        raise fleet event 'receive_report'
+          attributes trips;
+    }
+  }
 }
